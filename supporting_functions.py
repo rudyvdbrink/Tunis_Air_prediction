@@ -151,37 +151,7 @@ def filter_features(X_train,X_test,thresh=0.95):
         print("No features dropped based on correlation.")
 
     return X_train, X_test, columns_to_drop
-
-def undo_log_transform(data):
-    """
-    Undo a log transform on a pandas Series or numpy array.
-    
-    Parameters:
-    data (pd.Series or np.ndarray): The data that has been log-transformed.
-    
-    Returns:
-    pd.Series or np.ndarray: The data after undoing the log transformation.
-    """
-    
-    # Define the transformation function
-    def transform(x):
-        if x <= 0:
-            return 0
-        else:
-            return np.exp(x)
-    
-    # If input is a pandas Series
-    if isinstance(data, pd.Series):
-        return data.apply(transform)
-    
-    # If input is a numpy array
-    elif isinstance(data, np.ndarray):
-        vectorized_transform = np.vectorize(transform)
-        return vectorized_transform(data)
-    
-    else:
-        raise TypeError("Input should be a pandas Series or numpy array")
-    
+   
 def prediction_plots(y_train, y_test, y_pred_train, y_pred):
     """
     Evaluate a model by plotting scatter plots of true vs predicted values
