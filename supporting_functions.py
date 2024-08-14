@@ -151,7 +151,62 @@ def filter_features(X_train,X_test,thresh=0.95):
         print("No features dropped based on correlation.")
 
     return X_train, X_test, columns_to_drop
+
+#%% functions for post-processing / prediction
    
+#function to make a combined prediction with the classification and regression models
+def make_combined_prediction(X,classification_model,regression_model):
+    #first, make prediction with regression model
+    r_pred = regression_model.predict(X)
+
+    #second, make prediction with classification model
+    c_pred = classification_model.predict(X)
+
+    #set predicted delay to 0 for the flights that the classification model estimated to be on time
+    return r_pred * c_pred
+
+def compute_feature_importance(X, y, classification_model, regression_model, metric, npermutes):
+    
+    y = np.expm1(y)
+
+    # Calculate the baseline error metric on the original data
+    y_pred = make_combined_prediction(X,classification_model,regression_model)
+    baseline_metric = metric( y , np.expm1(y_pred))
+    print('base metric = ' + str(baseline_metric))
+
+    feature_importance = np.empty( (npermutes,len(X.columns)) ) #will contain permuted metrics
+
+    for permi in range(0,npermutes): #iterate over permutations
+        print('permutaiton ' + str(permi + 1) + ' / ' + str(npermutes))
+        for col_num, col in enumerate(X.columns): #iterate over columns in design matrix (features)
+
+            #shuffle rows in feature (permute)
+            X_permuted = X.copy()
+            X_permuted[col] = np.random.permutation(X_permuted[col])
+
+            #make sure columns are the right data type after shuffling (numyp turns categorical into object)
+            #make sure columns are the right data type after shuffling (numyp turns categorical into object)
+            cat_columns = X_permuted.select_dtypes(include='object').columns #identify the numeric columns
+            X_permuted[cat_columns] = X_permuted[cat_columns].astype('category')
+
+            #calculate the metric on the permuted design matrix
+            y_pred_permuted = make_combined_prediction(X_permuted, classification_model, regression_model)
+            permuted_metric = metric(y, np.expm1(y_pred_permuted))
+
+            #calculate feature importance (the difference with the un-shuffled metric)
+            feature_importance[permi, col_num] = permuted_metric - baseline_metric #positive values mean that, when shuffling this feature, error increased (thus, the feature is important)
+
+    #sort features by their importance
+    sidx = np.argsort( np.mean(feature_importance,axis=0) ) #get indices of features sorted by importance
+    sidx = sidx[::-1] #sort descending instead of ascending
+
+    feature_importance = feature_importance[:,sidx] #sort features
+    feature_labels     = X.columns[sidx] #sort labels
+
+    return feature_importance, feature_labels
+
+#%% functions for plotting
+
 def prediction_plot(y_test, y_pred):
     """
     Evaluate the model by plotting scatter plots of true vs predicted values
@@ -180,3 +235,31 @@ def prediction_plot(y_test, y_pred):
     plt.legend()
     
     plt.tight_layout()
+
+def feature_importance_plot(feature_importance,feature_labels, N):
+    mean_importance = np.mean(feature_importance, axis=0) #average across permutations
+    upper_range     = np.percentile(feature_importance,axis=0, q=95 ) #upper confidence interval
+    lower_range     = np.percentile(feature_importance,axis=0, q=5  ) #lower confidence interval
+
+    # Calculate the error bars (upper and lower)
+    error_bars = np.array([mean_importance - lower_range, upper_range - mean_importance])
+
+    P = len(feature_labels)
+
+    # Create the horizontal bar chart
+    #plt.figure(figsize=(10, P/2))  # Adjust the size based on the number of features
+    plt.barh(np.arange(P), np.mean(feature_importance, axis=0), xerr=error_bars, align='center', color='skyblue', ecolor='black', capsize=5)
+
+    # Set the y-ticks and invert y-axis to have the most important features on top
+    plt.yticks(np.arange(P), labels=feature_labels)
+    plt.gca().invert_yaxis()
+
+    # Add labels and title
+    plt.xlabel('Feature Importance (Delta MSE)')
+    plt.ylabel('Feature name')
+    plt.title('Feature Importance with 95% Confidence Intervals')
+    #plt.gca().invert_yaxis()
+
+    plt.ylim([N-0.5, -0.5])
+    #plt.ylim([len(X_train.columns)-N + 0.5, len(X_train.columns)])
+    plt.title('Top ' + str(N) +  ' features')
