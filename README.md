@@ -1,18 +1,15 @@
-# Predictive modeling skeletonscripts
-Bare bones skeleton scripts for predictive modeling of cross-sectional data. The aim of these scripts is to have a set of easily adjustable templates for loading data and fitting predictive models.
+# Tunis Air flight delay prediction
 
-`example_fit_linear_model.ipynb`, cleans data from a dataset about titanic passenger information, runs simple feature engineering, and fits a logistic regression model to predict if a passenger survived the sinking. It is not intended to showcase the best model for this purpose (the model does alright but other models can do better) or how to best construct a regression model. Instead, the aim is to show how with relatively few modifications, we can turn `skeleton_fit_linear_model` into a functional pipeline.
+Machine learning challenge to predict flight delays for Tunis Air. Information on the challenge can be found [here](https://zindi.africa/competitions/flight-delay-prediction-challenge).
+
+Before running the code, you need to download the [data](https://zindi.africa/competitions/flight-delay-prediction-challenge/data).
+
+For this coding challenge I used some of the code from [this](https://github.com/rudyvdbrink/Tunis_Air_prediction) repository.
+
+The (current) best solution to the coding challenge involved breaking the problem down into two distinct components: one a classification task, and one a regression task. The classification task involved predicting if a flight is delayed (or not), and the regression task involved predicting the amount of delay of a flight, assuming that it is delayed in the first place.  
 
 List of files:
-- `load_data.ipynb`: jupyter notebook for loading and saving datasets (titanic and iris)
-- `load_data.py`: same as above but python script
-- `skeleton_load_data_SQL.ipynb`: template notebook for loading data from postgress database with an SQL query
-- `skeleton_load_data_SQL.py`: same as above but python script
-- `skeleton_fit_linear_model.ipynb`: template notebook for linear modeling pipeline
-- `skeleton_fit_linear_model.py`: same as above but python script
-- `example_fit_linear_model.ipynb`: example of modified template to procduce functional pipeline
-- `example_fit_nonlinear_model.ipynb`: another example, this time with a non-linear model (xgboost)
-- `supporting_functions.py`: file that contains helper functions for data cleaning and feature filtering
+- `0_EDA`: Initial data exploration and making some plots.
 
 ### **Installation, for `macOS`** do the following: 
 
