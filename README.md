@@ -4,7 +4,7 @@ Machine learning challenge to predict flight delays for Tunis Air. Information o
 
 Before running the code, you need to download the [data](https://zindi.africa/competitions/flight-delay-prediction-challenge/data).
 
-For this coding challenge I used some of the code from [this](https://github.com/rudyvdbrink/Tunis_Air_prediction) repository.
+For this coding challenge I used some of the code from [this](https://github.com/rudyvdbrink/Predictive_modeling_skeletonscripts) repository.
 
 And overview of some of the the models I've tried:
 
