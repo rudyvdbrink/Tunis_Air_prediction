@@ -156,6 +156,16 @@ def filter_features(X_train,X_test,thresh=0.95):
    
 #function to make a combined prediction with the classification and regression models
 def make_combined_prediction(X,classification_model,regression_model):
+    """_summary_
+
+    Args:
+        X (_type_): _description_
+        classification_model (_type_): _description_
+        regression_model (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """    
     #first, make prediction with regression model
     r_pred = regression_model.predict(X)
 
@@ -166,7 +176,19 @@ def make_combined_prediction(X,classification_model,regression_model):
     return r_pred * c_pred
 
 def compute_feature_importance(X, y, classification_model, regression_model, metric, npermutes):
-    
+    """_summary_
+
+    Args:
+        X (pandas.DataFrame): Design matrix.
+        y (numpy.Array): Labels
+        classification_model (model): _description_
+        regression_model (model): _description_
+        metric (function): _description_
+        npermutes (int): Number of iterations for permutation testing
+
+    Returns:
+        _type_: _description_
+    """    
     y = np.expm1(y)
 
     # Calculate the baseline error metric on the original data
