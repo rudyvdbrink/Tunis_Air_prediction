@@ -6,10 +6,24 @@ Before running the code, you need to download the [data](https://zindi.africa/co
 
 For this coding challenge I used some of the code from [this](https://github.com/rudyvdbrink/Tunis_Air_prediction) repository.
 
-The (current) best solution to the coding challenge involved breaking the problem down into two distinct components: one a classification task, and one a regression task. The classification task involved predicting if a flight is delayed (or not), and the regression task involved predicting the amount of delay of a flight, assuming that it is delayed in the first place.  
+And overview of some of the the models I've tried:
 
-List of files:
-- `0_EDA`: Initial data exploration and making some plots.
+ 
+
+
+<p align="center">
+    <img src="./plots/Models.png" width="600"\>
+</p>
+
+The (current) best solution to the coding challenge involved breaking the problem down into two distinct components: one a classification task, and one a regression task. The classification task involved predicting if a flight is delayed (or not), and the regression task involved predicting the amount of delay of a flight, assuming that it is delayed. 
+
+### List of files:
+- `0_EDA.ipynb`: Initial data exploration and making some plots.
+- `1_preprocess_data.ipynb`: Prepare data for ML models (including train-test split).
+- `2a_fit_classifcation_model.ipynb`: Fit XGBoost classifier to make binary delay / on time predictions.
+- `2b_fit_regression_model.ipynb`: Fit XGBoost regression model to make graded delay predictions.
+- `3_combine_models.ipynb`: Make a predictions based on the combination of the classifier and regressor, and run model evaluation.
+
 
 ### **Installation, for `macOS`** do the following: 
 
