@@ -156,15 +156,17 @@ def filter_features(X_train,X_test,thresh=0.95):
    
 #function to make a combined prediction with the classification and regression models
 def make_combined_prediction(X,classification_model,regression_model):
-    """_summary_
+    """Makes predictions for a combined classification model and regression model.
+    Predictions are made by the multiplication of the classifier output and regression
+    output. 
 
     Args:
-        X (_type_): _description_
-        classification_model (_type_): _description_
-        regression_model (_type_): _description_
+        X (pandas.DataFrame): Design matrix.
+        classification_model (model): Trained model for classification task.
+        regression_model (model): Trained model for regression task.
 
     Returns:
-        _type_: _description_
+        y_pred: Predicted target variable.
     """    
     #first, make prediction with regression model
     r_pred = regression_model.predict(X)
@@ -181,13 +183,14 @@ def compute_feature_importance(X, y, classification_model, regression_model, met
     Args:
         X (pandas.DataFrame): Design matrix.
         y (numpy.Array): Labels
-        classification_model (model): _description_
-        regression_model (model): _description_
-        metric (function): _description_
+        classification_model (model): Trained model for classification task.
+        regression_model (model): Trained model for regression task.
+        metric (function): Scoring metric to use (e.g. mean_square_error)
         npermutes (int): Number of iterations for permutation testing
 
     Returns:
-        _type_: _description_
+        feature_importance (numpy.Array): Data frame with rows (permutation iterations) x features (ordered by importance). 
+        feature_labels (list): Labels of features ordered by feature importance.
     """    
     y = np.expm1(y)
 
@@ -259,6 +262,14 @@ def prediction_plot(y_test, y_pred):
     plt.tight_layout()
 
 def feature_importance_plot(feature_importance,feature_labels, N):
+    """Makes bar graph of feature importance, where positive values are assumed
+    to mean the feature is important. N features are plotted.
+
+    Args:
+        feature_importance (numpy.Array): Data frame with rows (permutation iterations) x features (ordered by importance). 
+        feature_labels (list): Labels of features ordered by feature importance.
+        N (int): How many top features to plot.
+    """    
     mean_importance = np.mean(feature_importance, axis=0) #average across permutations
     upper_range     = np.percentile(feature_importance,axis=0, q=95 ) #upper confidence interval
     lower_range     = np.percentile(feature_importance,axis=0, q=5  ) #lower confidence interval
