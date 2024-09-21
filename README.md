@@ -15,7 +15,7 @@ And overview of some of the the models I've tried:
     <img src="https://github.com/rudyvdbrink/Tunis_Air_prediction/blob/main/plots/models.png" width="600"\>
 </p>
 
-The (current) best solution to the coding challenge involved breaking the problem down into two distinct components: one a classification task, and one a regression task. The classification task involved predicting if a flight is delayed (or not), and the regression task involved predicting the amount of delay of a flight, assuming that it is delayed. 
+The best solution to the coding challenge (that I could find) involved breaking the problem down into two distinct components: one a classification task, and one a regression task. The classification task involved predicting if a flight is delayed (or not), and the regression task involved predicting the amount of delay of a flight, assuming that it is delayed. 
 
 ### List of files:
 - `0_EDA.ipynb`: Initial data exploration and making some plots.
